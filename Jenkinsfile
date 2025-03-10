@@ -14,12 +14,6 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh 'sudo apt-get update && sudo apt-get install -y git maven docker.io'  // ✅ Ensure Git, Maven, and Docker are installed
-            }
-        }
-
         stage('Build') {
             steps {
                 sh 'mvn clean package'  // ✅ Build the Java app
