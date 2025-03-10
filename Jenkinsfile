@@ -6,6 +6,7 @@ pipeline {
     environment {
         APP_NAME = "docker2025"
         JAR_NAME = "target/${APP_NAME}-1.0-SNAPSHOT.jar"
+        IMAGE_NAME = "ck2135/${APP_NAME}:latest" // Docker image name
     }
 
     stages {
@@ -21,21 +22,33 @@ pipeline {
             }
         }
 
-        stage('Run') {
+        stage('Verify Build') {
             steps {
-                sh "nohup java -jar $JAR_NAME > app.log 2>&1 &"
-                sh "sleep 5 && ps aux | grep java"  // Check if the app is running
+                sh 'ls target/'  // Check if JAR is created
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'  // Build a Docker image
+            }
+        }
+
+        stage('Run Application in Docker') {
+            steps {
+                sh 'docker run -d -p 8080:8080 --name ${APP_NAME} ${IMAGE_NAME}'  // Run the app in Docker
             }
         }
     }
 
     post {
         success {
-            echo "✅ Application is running!"
+            echo "✅ Application is running at http://localhost:8080"
         }
         failure {
             echo "❌ Build Failed! Check the logs."
         }
     }
 }
+
 
