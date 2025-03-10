@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        docker { image 'maven:3.8.1-openjdk-11' } // Use Maven with JDK 11 inside Docker
-    }
+    agent any // ✅ Run on Jenkins host, NOT inside a Docker container
 
     environment {
         APP_NAME = "docker2025"
@@ -12,31 +10,37 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/ck2135/docker2025.git'  // Clone your repo
+                git branch: 'main', url: 'https://github.com/ck2135/docker2025.git'  // ✅ Ensure the correct branch
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'sudo apt-get update && sudo apt-get install -y git maven docker.io'  // ✅ Ensure Git, Maven, and Docker are installed
             }
         }
 
         stage('Build') {
             steps {
-                sh 'mvn clean package'  // Build the Java app
+                sh 'mvn clean package'  // ✅ Build the Java app
             }
         }
 
         stage('Verify Build') {
             steps {
-                sh 'ls target/'  // Check if JAR is created
+                sh 'ls target/'  // ✅ Check if JAR exists
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'  // Build a Docker image
+                sh 'docker build -t $IMAGE_NAME .'  // ✅ Build the Docker image
             }
         }
 
         stage('Run Application in Docker') {
             steps {
-                sh 'docker run -d -p 8080:8080 --name ${APP_NAME} ${IMAGE_NAME}'  // Run the app in Docker
+                sh 'docker run -d -p 8080:8080 --name ${APP_NAME} ${IMAGE_NAME}'  // ✅ Run the app in Docker
             }
         }
     }
