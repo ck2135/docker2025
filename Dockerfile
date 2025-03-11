@@ -1,5 +1,5 @@
-# Use a lightweight OpenJDK 11 runtime
-FROM eclipse-temurin:11-jre-alpine
+# Use a lightweight OpenJDK 21 runtime
+FROM eclipse-temurin:21-jre-alpine
 
 # Set working directory inside the container
 WORKDIR /opt/app
