@@ -34,7 +34,7 @@ pipeline {
 
         stage('Run Application in Docker') {
             steps {
-                sh 'docker run -d -p 8080:8080 --name ${APP_NAME} ${IMAGE_NAME}'  // ✅ Run the app in Docker
+                sh 'docker run -d -p 8080:8081 --name ${APP_NAME} ${IMAGE_NAME}'  // ✅ Run the app in Docker
             }
         }
     }
