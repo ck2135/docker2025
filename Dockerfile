@@ -4,9 +4,11 @@ FROM eclipse-temurin:11-jre-alpine
 # Set working directory inside the container
 WORKDIR /opt/app
 
-# Copy the built JAR file from the Jenkins pipeline
-ARG JAR_NAME=target/docker2025-1.0-SNAPSHOT.jar
-COPY ${JAR_NAME} app.jar
+# Accept the JAR file name as a build argument
+ARG JAR_NAME=docker2025-1.0-SNAPSHOT.jar
+
+# Copy the built JAR file dynamically
+COPY target/${JAR_NAME} app.jar
 
 # Expose the application port
 EXPOSE 8080
