@@ -40,7 +40,7 @@ pipeline {
                     docker stop ${APP_NAME}
                     docker rm ${APP_NAME}
                 fi
-                docker run -d -p 80:8081 --name ${APP_NAME} ${IMAGE_NAME}
+                docker run -d -p 8085:8081 --name ${APP_NAME} ${IMAGE_NAME}
                 '''
             }
         }
